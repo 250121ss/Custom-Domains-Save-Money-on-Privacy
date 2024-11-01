@@ -1,0 +1,90 @@
+To set up and secure your local network with SSL and custom domains using DuckDNS and Nginx Proxy Manager, follow these steps. This guide aligns with the chapters and instructions you've outlined.
+====================================================================================================
+Step 1: Create a Free Domain on DuckDNS  
+
+    Go to DuckDNS.org.
+    Register and log in, then create a new subdomain (e.g., yourdomain.duckdns.org).
+    Note the token provided, as you’ll need it for domain updates.
+
+======================================================================================================
+
+Step 2: Point the Domain to Your Local Server
+
+    DuckDNS allows you to dynamically update the domain to point to your IP address. This can be automated in DuckDNS or updated manually.
+    If you’re behind a router, set up port forwarding for HTTP (80) and HTTPS (443) to direct traffic to your Docker host.
+========================================================================================================
+
+Step 3: Set Up Nginx Proxy Manager with Docker
+
+Create a docker-compose.yml file for Nginx Proxy Manager. Use the configuration you shared:
+
+yaml
+
+version: '3'
+services:
+  nginx-proxy-manager:
+    image: jc21/nginx-proxy-manager
+    container_name: nginx-proxy-manager
+    ports:
+      - "80:80"
+      - "81:81"
+      - "443:443"
+    volumes:
+      - /home/tech/files/docker/volumes/nginx-proxy-manager/data:/data
+      - /home/tech/files/docker/volumes/nginx-proxy-manager/letsencrypt:/etc/letsencrypt
+    restart: unless-stopped
+
+    Save and navigate to the directory with the docker-compose.yml file.
+    Run docker-compose up -d to start Nginx Proxy Manager.
+
+=============================================================================================
+
+Step 4: Access Nginx Proxy Manager
+
+    Open a browser and go to http://localhost:81.
+    Log in using the default credentials (admin@example.com / changeme), then update your credentials.
+
+==============================================================================================
+Step 5: Generate Free SSL Certificates with Let’s Encrypt
+
+    In the Nginx Proxy Manager interface, go to Hosts > Proxy Hosts and add a new proxy host.
+    Enter your DuckDNS domain as the hostname (e.g., yourdomain.duckdns.org).
+    Point the domain to your local services (like Proxmox or TrueNAS) by setting the local IP and port.
+    Under the SSL tab, select Request a new SSL certificate and choose Let’s Encrypt. Make sure to agree to the terms.
+    Click Save to generate the SSL certificate.
+
+=================================================================================================
+
+Step 6: Create Subdomains for Services
+
+    Follow similar steps to create subdomains (e.g., proxmox.yourdomain.duckdns.org, truenas.yourdomain.duckdns.org).
+    Point each subdomain to the respective internal IP and port for each service.
+    Request SSL certificates for each subdomain to ensure secure access.
+
+=========================================================================================================================
+
+Step 7: Access Services Locally & Securely
+
+    Use the custom domain and subdomains you set up with SSL to access your local services.
+    You can now securely reach Proxmox, TrueNAS, or other services on your network through encrypted connections using your DuckDNS domain.
+
+By following these steps, you'll have a secure, user-friendly setup with Nginx Proxy Manager, SSL, and custom domains that allow you to manage and access your network services easily.
+
+================================================================================================================================
+
+To find your local IP address, you can use one of the following commands, depending on your operating system:
+
+
+On Linux or macOS:
+
+ip a
+
+
+or
+
+ifconfig
+
+
+==================================================
+
+
