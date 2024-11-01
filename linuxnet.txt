@@ -30,8 +30,8 @@ services:
       - "81:81"
       - "443:443"
     volumes:
-      - /home/tech/files/docker/volumes/nginx-proxy-manager/data:/data
-      - /home/tech/files/docker/volumes/nginx-proxy-manager/letsencrypt:/etc/letsencrypt
+      - /home/codespace/local/volumes/nginx-proxy-manager/data:/data
+      - /home/codespace/local/volumes/nginx-proxy-manager/letsencrypt:/etc/letsencrypt
     restart: unless-stopped
 
     Save and navigate to the directory with the docker-compose.yml file.
